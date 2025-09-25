@@ -14,6 +14,23 @@ public class scrio : MonoBehaviour
     Rigidbody2D rb;
     Collider2D coll;
 
+    Vector2 moveInput;
+    bool jumpPressed;
+
+    InputAction moveAction;
+    InputAction jumpAction;
+
+    void Awake()
+    {
+        moveAction = new InputAction(type: InputActionType.Value, binding: "<Keyboard>/a");
+        moveAction.AddCompositeBinding("1DAxis")
+            .With("Negative", "<Keyboard>/a")
+            .With("Positive", "<Keyboard>/d");
+        jumpAction = new InputAction(type: InputActionType.Button, binding: "<Keyboard>/space");
+        moveAction.Enable();
+        jumpAction.Enable();
+    }
+
     void Start()
     {
         groundLayer = LayerMask.GetMask("Ground");
@@ -23,8 +40,8 @@ public class scrio : MonoBehaviour
 
     void Update()
     {
-        var keyboard = Keyboard.current;
-        if (keyboard == null) return;
+        moveInput = new Vector2(moveAction.ReadValue<float>(), 0);
+        jumpPressed = jumpAction.triggered;
 
         if (isGrounded())
         {
@@ -40,19 +57,20 @@ public class scrio : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         }
 
-        if (keyboard.dKey.isPressed)
+        if (moveInput.x > 0.1f)
         {
             rb.linearVelocity = new Vector2(speed * speedModifier, rb.linearVelocity.y);
             if (transform.rotation.eulerAngles.y != 0)
                 transform.Rotate(0, -180, 0);
         }
-        if (keyboard.aKey.isPressed)
+        else if (moveInput.x < -0.1f)
         {
             rb.linearVelocity = new Vector2(-speed * speedModifier, rb.linearVelocity.y);
             if (transform.rotation.eulerAngles.y != 180)
                 transform.Rotate(0, 180, 0);
         }
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+
+        if (jumpPressed)
         {
             if (isGrounded())
             {
@@ -65,9 +83,7 @@ public class scrio : MonoBehaviour
                 jumps++;
             }
         }
-
     }
-
 
     bool isGrounded() => Physics2D.BoxCast(
         coll.bounds.center,
