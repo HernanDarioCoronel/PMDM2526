@@ -14,3 +14,20 @@ UD1/MyGame2D/*.sln
 UD1/MyGame2D/.vs/
 UD1/MyGame2D/.idea/
 UD1/MyGame2D/.vscode/
+
+# Unity project under UD1/Coneho
+UD1/Coneho/[Ll]ibrary/
+UD1/Coneho/[Tt]emp/
+UD1/Coneho/[Oo]bj/
+UD1/Coneho/[Bb]uild/
+UD1/Coneho/[Bb]uilds/
+UD1/Coneho/[Ll]ogs/
+UD1/Coneho/[Mm]emoryCaptures/
+UD1/Coneho/[Bb]uildCache/
+
+# Ignore IDE files in project
+UD1/Coneho/*.csproj
+UD1/Coneho/*.sln
+UD1/Coneho/.vs/
+UD1/Coneho/.idea/
+UD1/Coneho/.vscode/
