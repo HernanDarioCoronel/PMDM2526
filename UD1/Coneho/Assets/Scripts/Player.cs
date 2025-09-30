@@ -3,6 +3,15 @@ using UnityEngine.InputSystem;
 
 public class scrio : MonoBehaviour
 {
+    enum AnimTypeEnum
+    {
+        Idle = 0,
+        Run = 1,
+        Jump = 2
+    }
+    SpriteRenderer spriteRenderer;
+    AnimTypeEnum animState = AnimTypeEnum.Idle;
+    Animator animator;
     float speed = 12f;
     float jumpForce = 30f;
     LayerMask groundLayer;
@@ -22,6 +31,8 @@ public class scrio : MonoBehaviour
 
     void Awake()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         moveAction = new InputAction(type: InputActionType.Value, binding: "<Keyboard>/a");
         moveAction.AddCompositeBinding("1DAxis")
             .With("Negative", "<Keyboard>/a")
@@ -50,24 +61,22 @@ public class scrio : MonoBehaviour
 
         if (jumps == maxJumps)
         {
-            transform.Rotate(0, 0, -10);
+            transform.Rotate(0, 0, spriteRenderer.flipX ? 10 : -10);
         }
         else
-        {
+        { // te endereza al tocar el suelo
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         }
 
-        if (moveInput.x > 0.1f)
+        if (moveInput.x > 0f)
         {
             rb.linearVelocity = new Vector2(speed * speedModifier, rb.linearVelocity.y);
-            if (transform.rotation.eulerAngles.y != 0)
-                transform.Rotate(0, -180, 0);
+            spriteRenderer.flipX = false;
         }
-        else if (moveInput.x < -0.1f)
+        else if (moveInput.x < -0f)
         {
             rb.linearVelocity = new Vector2(-speed * speedModifier, rb.linearVelocity.y);
-            if (transform.rotation.eulerAngles.y != 180)
-                transform.Rotate(0, 180, 0);
+            spriteRenderer.flipX = true;
         }
 
         if (jumpPressed)
@@ -83,6 +92,19 @@ public class scrio : MonoBehaviour
                 jumps++;
             }
         }
+        if (!isGrounded())
+        {
+            animState = AnimTypeEnum.Jump;
+        }
+        else if (moveInput.x != 0)
+        {
+            animState = AnimTypeEnum.Run;
+        }
+        else
+        {
+            animState = AnimTypeEnum.Idle;
+        }
+        animator.SetInteger("state", (int)animState);
     }
 
     bool isGrounded() => Physics2D.BoxCast(
