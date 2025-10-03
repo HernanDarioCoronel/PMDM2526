@@ -1,3 +1,4 @@
+using System.Reflection.Emit;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,14 +8,16 @@ public class scrio : MonoBehaviour
     {
         Idle = 0,
         Run = 1,
-        Jump = 2
+        Jump = 2,
+        Death = 3
     }
     SpriteRenderer spriteRenderer;
     AnimTypeEnum animState = AnimTypeEnum.Idle;
     Animator animator;
-    float speed = 12f;
-    float jumpForce = 30f;
+    public float speed = 10f;
+    public float jumpForce = 20f;
     LayerMask groundLayer;
+    LayerMask deathLayer;
     int jumps = 0;
     int maxJumps = 1;
 
@@ -40,6 +43,19 @@ public class scrio : MonoBehaviour
         jumpAction = new InputAction(type: InputActionType.Button, binding: "<Keyboard>/space");
         moveAction.Enable();
         jumpAction.Enable();
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Defeat"))
+        {
+            rb.bodyType = RigidbodyType2D.Static;
+            animState = AnimTypeEnum.Death;
+            spriteRenderer.color = Color.red;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(
+                UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
+            );
+        }
     }
 
     void Start()
