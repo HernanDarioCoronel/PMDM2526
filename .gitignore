@@ -26,8 +26,25 @@ UD1/Coneho/[Mm]emoryCaptures/
 UD1/Coneho/[Bb]uildCache/
 
 # Ignore IDE files in project
-UD1/Coneho/*.csproj
-UD1/Coneho/*.sln
-UD1/Coneho/.vs/
-UD1/Coneho/.idea/
-UD1/Coneho/.vscode/
+UD1/Plataformero2D/*.csproj
+UD1/Plataformero2D/*.sln
+UD1/Plataformero2D/.vs/
+UD1/Plataformero2D/.idea/
+UD1/Plataformero2D/.vscode/
+
+# Unity project under UD1/Plataformero2D
+UD1/Plataformero2D/[Ll]ibrary/
+UD1/Plataformero2D/[Tt]emp/
+UD1/Plataformero2D/[Oo]bj/
+UD1/Plataformero2D/[Bb]uild/
+UD1/Plataformero2D/[Bb]uilds/
+UD1/Plataformero2D/[Ll]ogs/
+UD1/Plataformero2D/[Mm]emoryCaptures/
+UD1/Plataformero2D/[Bb]uildCache/
+
+# Ignore IDE files in project
+UD1/Plataformero2D/*.csproj
+UD1/Plataformero2D/*.sln
+UD1/Plataformero2D/.vs/
+UD1/Plataformero2D/.idea/
+UD1/Plataformero2D/.vscode/
