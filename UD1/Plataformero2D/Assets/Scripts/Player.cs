@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
         Movement();
         if (isGrappling)
         {
+            Vector2 moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
             rb.AddForce(Vector2.right * moveInput.x * grappleSwingForce);
         }
     }
