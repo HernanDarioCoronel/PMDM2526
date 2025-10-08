@@ -6,26 +6,88 @@ public class Player : MonoBehaviour
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float jumpForce = 15f;
-    public float jumpsAllowed = 2;
-    private int jumpsRemaining = 0;   
+    public int jumpsAllowed = 2;
 
+    [Header("Grappling Settings")]
+    public float grappleMaxRange = 10f;
+    public float grappleSwingForce = 15f;
 
-    PlayerInput playerInput;
-    Rigidbody2D rb;
-    float gravityScaleAtStart;
-    
+    private PlayerInput playerInput;
+    private Rigidbody2D rb;
+    private float gravityScaleAtStart;
+    private Collider2D currentGrapplePoint;
+    private DistanceJoint2D grappleJoint;
+    private LineRenderer grappleLine;
+
+    private bool isGrappling = false;
+    private int jumpsRemaining = 0;
+
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
+
         rb = GetComponent<Rigidbody2D>();
         gravityScaleAtStart = rb.gravityScale;
+
+        grappleJoint = GetComponent<DistanceJoint2D>();
+        grappleJoint.enabled = false;
+        grappleJoint.autoConfigureDistance = false;
+        grappleJoint.autoConfigureConnectedAnchor = false;
+
+        grappleLine = GetComponent<LineRenderer>();
+        grappleLine.enabled = false;
+        grappleLine.startWidth = 0.05f;
+        grappleLine.endWidth = 0.05f;
+        grappleLine.startColor = Color.green;
+        grappleLine.endColor = Color.green;
+    }
+
+    void FixedUpdate()
+    {
+        Movement();
+        if (isGrappling)
+        {
+            rb.AddForce(Vector2.right * moveInput.x * grappleSwingForce);
+        }
     }
 
     void Update()
     {
-        Movement();
-        Jump();
+        // Saltar
+        if (playerInput.actions["Jump"].WasPressedThisFrame())
+        {
+            Jump();
+            GrapplingSystem.StopGrapple(grappleJoint, grappleLine);
+            isGrappling = false;
+        }
+
+        // Grappling
+        if (playerInput.actions["Interact"].WasPressedThisFrame())
+        {
+            if (!isGrappling)
+            {
+                rb.gravityScale = gravityScaleAtStart * 2;
+                isGrappling = GrapplingSystem.StartGrapple(
+                    rb,
+                    grappleJoint,
+                    grappleLine,
+                    transform,
+                    currentGrapplePoint,
+                    grappleMaxRange
+                );
+            }
+            else
+            {
+                rb.gravityScale = gravityScaleAtStart;
+                GrapplingSystem.StopGrapple(grappleJoint, grappleLine);
+                isGrappling = false;
+            }
+        }
+
+        // Dibuja la cuerda
+        GrapplingSystem.DrawGrappleLine(grappleLine, transform, currentGrapplePoint);
     }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -38,6 +100,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("GrapplePoint"))
+            currentGrapplePoint = other;
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other == currentGrapplePoint)
+            currentGrapplePoint = null;
+    }
+
     void OnCollisionExit2D(Collision2D collision)
     {
         WallLatch(false);
@@ -45,29 +119,21 @@ public class Player : MonoBehaviour
 
     void Movement()
     {
-        if (playerInput.actions["Move"].IsPressed())
-        {
-            Vector2 moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
-            //rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
-            //to do: fix wall penetration
-            transform.Translate(new Vector2(moveInput.x * moveSpeed * Time.deltaTime, 0));
-        }
+        Vector2 moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
+        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
     }
 
     void Jump()
     {
-        if (playerInput.actions["Jump"].WasPressedThisFrame())
+        if (jumpsRemaining < jumpsAllowed)
         {
-            if (jumpsRemaining < jumpsAllowed)
+            jumpsRemaining++;
+            if (jumpsRemaining > 1)
             {
-                jumpsRemaining++;
-                if (jumpsRemaining > 1)
-                {
-                    rb.linearVelocityY = 0;
-                    //animacion doble salto
-                }
-                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+                // animación doble salto
             }
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }
 
@@ -76,11 +142,11 @@ public class Player : MonoBehaviour
         if (latch)
         {
             rb.gravityScale = 0;
-            rb.linearVelocityY = 0;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
         }
         else
         {
-            rb.gravityScale = 9.82f;
+            rb.gravityScale = gravityScaleAtStart;
         }
     }
 }
