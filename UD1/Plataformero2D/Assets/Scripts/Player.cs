@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public float moveSpeed = 5f;
     public float jumpForce = 15f;
     public int jumpsAllowed = 2;
+    public bool impulse = true;
 
     [Header("Grappling Settings")]
     public float grappleMaxRange = 10f;
@@ -21,6 +22,14 @@ public class Player : MonoBehaviour
 
     private bool isGrappling = false;
     private int jumpsRemaining = 0;
+    private bool isKnockedBack = false;
+    private float knockbackTime = 0.3f;
+    private float knockbackTimer = 0f;
+
+    [Header("Health Settings")]
+    public int health = 3;
+    public int maxHealth = 3;
+
 
     void Start()
     {
@@ -44,7 +53,19 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        Movement();
+        if (!isKnockedBack)
+        {
+            Movement();
+        }
+        else
+        {
+            knockbackTimer -= Time.fixedDeltaTime;
+            if (knockbackTimer <= 0f)
+            {
+                isKnockedBack = false;
+            }
+        }
+
         if (isGrappling)
         {
             Vector2 moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
@@ -131,6 +152,10 @@ public class Player : MonoBehaviour
             jumpsRemaining++;
             if (jumpsRemaining > 1)
             {
+                if (rb.linearVelocity.y < 0)
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+                }
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
                 // animación doble salto
             }
@@ -149,5 +174,12 @@ public class Player : MonoBehaviour
         {
             rb.gravityScale = gravityScaleAtStart;
         }
+    }
+
+    public void TakeDamage(Vector2 contact, int damage)
+    {
+        Vector2 ouchie = new Vector2(5, 5);
+        rb.AddForce(ouchie, ForceMode2D.Impulse);
+        isKnockedBack = true;
     }
 }
