@@ -4,31 +4,35 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 5f;
-    public float jumpForce = 15f;
-    public int jumpsAllowed = 2;
-    public bool impulse = true;
+    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] float jumpForce = 15f;
+    [SerializeField] int jumpsAllowed = 2;
+    [SerializeField] bool impulse = true;
 
     [Header("Grappling Settings")]
-    public float grappleMaxRange = 10f;
-    public float grappleSwingForce = 15f;
+    [SerializeField] float grappleMaxRange = 10f;
+    [SerializeField] float grappleSwingForce = 15f;
 
-    private PlayerInput playerInput;
-    private Rigidbody2D rb;
-    private float gravityScaleAtStart;
-    private Collider2D currentGrapplePoint;
-    private DistanceJoint2D grappleJoint;
-    private LineRenderer grappleLine;
+    PlayerInput playerInput;
+    Rigidbody2D rb;
+    float gravityScaleAtStart;
+    Collider2D currentGrapplePoint;
+    DistanceJoint2D grappleJoint;
+    LineRenderer grappleLine;
 
-    private bool isGrappling = false;
-    private int jumpsRemaining = 0;
-    private bool isKnockedBack = false;
-    private float knockbackTime = 0.3f;
-    private float knockbackTimer = 0f;
+    bool isGrappling = false;
+    int jumpsRemaining = 0;
+    bool isKnockedBack = false;
+    float knockbackTimer = 0.6f;
+    float knockbackTimerReset = 0.6f;
 
-    [Header("Health Settings")]
-    public int health = 3;
-    public int maxHealth = 3;
+    [Header("Stats Settings")]
+    [SerializeField] int health = 3;
+    [SerializeField] int maxHealth = 3;
+
+    [SerializeField] int points = 10000;
+    int pointsLostPerSecond = 50;
+    float timer = 0f;
 
 
     void Start()
@@ -63,6 +67,7 @@ public class Player : MonoBehaviour
             if (knockbackTimer <= 0f)
             {
                 isKnockedBack = false;
+                knockbackTimer = knockbackTimerReset;
             }
         }
 
@@ -75,6 +80,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        PointsLostOverTime();
         // Saltar
         if (playerInput.actions["Jump"].WasPressedThisFrame())
         {
@@ -163,6 +169,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    void PointsLostOverTime()
+    {
+        timer += Time.deltaTime;
+        if (timer >= 1f)
+        {
+            points -= pointsLostPerSecond;
+            timer = 0f;
+
+            if (points < 0)
+                points = 0;
+        }
+    }
+
     void WallLatch(bool latch)
     {
         if (latch)
@@ -175,11 +194,37 @@ public class Player : MonoBehaviour
             rb.gravityScale = gravityScaleAtStart;
         }
     }
-
+    public float pushAmount = 5f;
     public void TakeDamage(Vector2 contact, int damage)
     {
-        Vector2 ouchie = new Vector2(5, 5);
-        rb.AddForce(ouchie, ForceMode2D.Impulse);
+        health -= damage;
+        if (health <= 0)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(
+                UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
+            );
+        }
+
+        Vector2 finalForce = new Vector2(
+            -contact.normalized.x * pushAmount * 2f,
+             jumpForce
+                ) / 2f;
+        Vector2 getPushed = finalForce;
+        rb.AddForce(getPushed, ForceMode2D.Impulse);
         isKnockedBack = true;
     }
+
+    public void CollectCoin()
+    {
+        points += 250;
+    }
+
+    public void Heal()
+    {
+        if (health < maxHealth)
+            health += 1;
+        else
+            points += 500;
+    }
+
 }
