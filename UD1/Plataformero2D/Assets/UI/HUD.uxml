@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
->
-    
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:GroupBox style="flex-direction: row; justify-content: space-between;">
+        <ui:ProgressBar value="3" title="HP" high-value="3" name="HpBar" style="width: 200px; height: auto; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;" />
+        <ui:GroupBox name="TopHud" style="flex-direction: row; padding-top: 0; padding-bottom: 0; padding-left: 0; margin-right: 0; margin-top: 0; margin-left: 0; margin-bottom: 0;">
+            <ui:Label text="Score:" name="LabelScore" />
+            <ui:Label text="10000" name="LabelValue" style="min-width: 65px; max-width: 65px; width: 65px;">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="score" data-source="project://database/Assets/UI/PlayerScore.asset?fileID=11400000&amp;guid=14125fe3eee78214aaf8910f0358515c&amp;type=2#PlayerScore" binding-mode="ToTarget" update-trigger="OnSourceChanged" />
+                </Bindings>
+            </ui:Label>
+        </ui:GroupBox>
+    </ui:GroupBox>
 </ui:UXML>

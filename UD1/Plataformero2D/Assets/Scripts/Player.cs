@@ -7,19 +7,15 @@ public class Player : MonoBehaviour
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float jumpForce = 15f;
     [SerializeField] int jumpsAllowed = 2;
-    [SerializeField] bool impulse = true;
-
     [Header("Grappling Settings")]
     [SerializeField] float grappleMaxRange = 10f;
     [SerializeField] float grappleSwingForce = 15f;
-
     PlayerInput playerInput;
     Rigidbody2D rb;
     float gravityScaleAtStart;
     Collider2D currentGrapplePoint;
     DistanceJoint2D grappleJoint;
     LineRenderer grappleLine;
-
     bool isGrappling = false;
     int jumpsRemaining = 0;
     bool isKnockedBack = false;
@@ -29,8 +25,7 @@ public class Player : MonoBehaviour
     [Header("Stats Settings")]
     [SerializeField] int health = 3;
     [SerializeField] int maxHealth = 3;
-
-    [SerializeField] int points = 10000;
+    [SerializeField] PlayerStats playerStats;
     int pointsLostPerSecond = 50;
     float timer = 0f;
 
@@ -53,6 +48,7 @@ public class Player : MonoBehaviour
         grappleLine.endWidth = 0.05f;
         grappleLine.startColor = Color.green;
         grappleLine.endColor = Color.green;
+        playerStats.ResetScore();
     }
 
     void FixedUpdate()
@@ -174,11 +170,11 @@ public class Player : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= 1f)
         {
-            points -= pointsLostPerSecond;
+            playerStats.SubtractPoints(pointsLostPerSecond);
             timer = 0f;
 
-            if (points < 0)
-                points = 0;
+            if (playerStats.Score < 0)
+                playerStats.ResetScore();
         }
     }
 
@@ -216,7 +212,7 @@ public class Player : MonoBehaviour
 
     public void CollectCoin()
     {
-        points += 250;
+        playerStats.AddPoints(250);
     }
 
     public void Heal()
@@ -224,7 +220,7 @@ public class Player : MonoBehaviour
         if (health < maxHealth)
             health += 1;
         else
-            points += 500;
+            playerStats.AddPoints(500);
     }
 
 }
