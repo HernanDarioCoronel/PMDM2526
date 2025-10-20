@@ -1,36 +1,148 @@
+using System.Collections;
+using AnimEnums;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("Enemy Settings")]
-    public float speed = 1f;
+    float timer = 0f;
+    static float timerMax = 3f;
+
+    bool reachedPoint = false;
+    bool isWaiting = false;
+
+    [Header("Patrol Points")]
+    [SerializeField]
+    GameObject pointA;
+
+    [SerializeField]
+    GameObject pointB;
+    GameObject currentTarget;
+
+    [Header("Movement Settings")]
+    [SerializeField]
+    float speed = 2f;
+
+    [Header("Animation")]
+    [SerializeField]
+    Animator animator;
+
+    [SerializeField]
+    BasicEnemyAnimEnum currentAnim;
+
+    [Header("Attack Settings")]
+    CapsuleCollider2D attackTrigger;
+    bool attacking = false;
 
     void Start()
     {
+        currentTarget = pointA;
+        currentAnim = BasicEnemyAnimEnum.Run;
+        attackTrigger = GetComponent<CapsuleCollider2D>();
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        Vector2 tipPosition = transform.position + transform.right * GetComponent<SpriteRenderer>().bounds.extents.x;
-        RaycastHit2D hit = Physics2D.Raycast(tipPosition, Vector2.down, 1f);
-        if (hit.collider == null)
-            transform.Rotate(0, 180, 0);
-        Move();
+        if (!isWaiting)
+        {
+            Move();
+        }
+
+        animator.SetInteger("currAnim", (int)currentAnim);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        ContactPoint2D contact = collision.contacts[0];
         if (collision.gameObject.CompareTag("Player"))
-            collision.gameObject.GetComponent<Player>().TakeDamage(contact.normal, 1);
-        else
-            transform.Rotate(0, 180, 0);
+        {
+            Attack();
+        }
+    }
 
-        Debug.DrawRay(contact.point, contact.normal, Color.green, 2f);
+    void Attack()
+    {
+        BasicEnemyAnimEnum previousAnim = currentAnim;
+
+        currentAnim = BasicEnemyAnimEnum.Attack;
+        isWaiting = true;
+        attacking = true;
+
+        StartCoroutine(PerformAttack(previousAnim));
+    }
+
+    IEnumerator PerformAttack(BasicEnemyAnimEnum previousAnim)
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float attackDuration = stateInfo.length;
+
+        yield return new WaitForSeconds(attackDuration);
+
+        Collider2D hitPlayer = Physics2D.OverlapCapsule(
+            attackTrigger.bounds.center,
+            attackTrigger.bounds.size,
+            attackTrigger.direction,
+            0f,
+            LayerMask.GetMask("Player")
+        );
+
+        if (hitPlayer != null)
+        {
+            Vector2 contactDirection = (
+                hitPlayer.transform.position - transform.position
+            ).normalized;
+            Debug.Log(contactDirection);
+            hitPlayer.GetComponent<Player>().TakeDamage(contactDirection * -1, 1);
+        }
+
+        currentAnim = previousAnim;
+        attacking = false;
+        isWaiting = previousAnim == BasicEnemyAnimEnum.Idle;
+    }
+
+    void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && !attacking)
+        {
+            float distance = Vector2.Distance(transform.position, collision.transform.position);
+            if (distance <= 1.0f)
+            {
+                Attack();
+            }
+        }
     }
 
     void Move()
     {
-        transform.Translate(Vector2.right * speed * Time.deltaTime);
+        currentAnim = BasicEnemyAnimEnum.Run;
+
+        transform.position = Vector2.MoveTowards(
+            transform.position,
+            currentTarget.transform.position,
+            speed * Time.deltaTime
+        );
+
+        if (
+            Vector2.Distance(transform.position, currentTarget.transform.position) < 0.1f
+            && !isWaiting
+        )
+        {
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y + 180f, 0);
+            StartCoroutine(PauseAtPoint());
+        }
+    }
+
+    IEnumerator PauseAtPoint()
+    {
+        isWaiting = true;
+
+        currentAnim = BasicEnemyAnimEnum.Idle;
+        animator.SetInteger("currAnim", (int)currentAnim);
+
+        yield return new WaitForSeconds(3f);
+
+        currentAnim = BasicEnemyAnimEnum.Run;
+
+        currentTarget = currentTarget == pointA ? pointB : pointA;
+
+        isWaiting = false;
     }
 }

@@ -4,38 +4,56 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] float moveSpeed = 5f;
-    [SerializeField] float jumpForce = 15f;
-    [SerializeField] int jumpsAllowed = 2;
+    [SerializeField]
+    float moveSpeed = 5f;
+
+    [SerializeField]
+    PhysicsMaterial2D frictionMaterial;
+
+    [SerializeField]
+    float jumpForceInTiles = 2f;
+
+    public float trueJumpForce = 10f;
+
+    [SerializeField]
+    int jumpsAllowed = 2;
+
+    [SerializeField]
+    float pushAmount = 5f;
+
+    bool justLatched = false;
+
     [Header("Grappling Settings")]
-    [SerializeField] float grappleMaxRange = 10f;
-    [SerializeField] float grappleSwingForce = 15f;
+    [SerializeField]
+    float grappleMaxRange = 10f;
+
+    [SerializeField]
+    float grappleSwingForce = 15f;
     PlayerInput playerInput;
     Rigidbody2D rb;
+
+    [SerializeField]
     float gravityScaleAtStart;
     Collider2D currentGrapplePoint;
     DistanceJoint2D grappleJoint;
     LineRenderer grappleLine;
     bool isGrappling = false;
-    int jumpsRemaining = 0;
+    public int jumpsRemaining = 0;
     bool isKnockedBack = false;
     float knockbackTimer = 0.6f;
     float knockbackTimerReset = 0.6f;
 
     [Header("Stats Settings")]
-    [SerializeField] int health = 3;
-    [SerializeField] int maxHealth = 3;
-    [SerializeField] PlayerStats playerStats;
+    [SerializeField]
+    PlayerStats playerStats;
     int pointsLostPerSecond = 50;
     float timer = 0f;
-
 
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
 
         rb = GetComponent<Rigidbody2D>();
-        gravityScaleAtStart = rb.gravityScale;
 
         grappleJoint = GetComponent<DistanceJoint2D>();
         grappleJoint.enabled = false;
@@ -49,6 +67,8 @@ public class Player : MonoBehaviour
         grappleLine.startColor = Color.green;
         grappleLine.endColor = Color.green;
         playerStats.ResetScore();
+        playerStats.ResetHealth();
+        trueJumpForce *= jumpForceInTiles;
     }
 
     void FixedUpdate()
@@ -116,11 +136,22 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
+            if (collision.contacts[0].normal.y > 0.5f)
+                frictionMaterial.friction = 0f;
+            else
+            {
+                frictionMaterial.friction = 0.4f;
+                justLatched = false;
+            }
+
             jumpsRemaining = 0;
         }
-        if (collision.gameObject.CompareTag("Wall"))
+
+        WallLatch(collision.gameObject.CompareTag("Wall") && !justLatched);
+
+        if (collision.gameObject.CompareTag("Death"))
         {
-            WallLatch(true);
+            playerStats.ApplyDamage(playerStats.MaxHealth);
         }
     }
 
@@ -161,7 +192,7 @@ public class Player : MonoBehaviour
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
                 // animación doble salto
             }
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * trueJumpForce, ForceMode2D.Impulse);
         }
     }
 
@@ -182,29 +213,29 @@ public class Player : MonoBehaviour
     {
         if (latch)
         {
+            justLatched = true;
             rb.gravityScale = 0;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+            jumpsRemaining--;
         }
         else
         {
             rb.gravityScale = gravityScaleAtStart;
         }
     }
-    public float pushAmount = 5f;
+
     public void TakeDamage(Vector2 contact, int damage)
     {
-        health -= damage;
-        if (health <= 0)
+        playerStats.ApplyDamage(damage);
+        if (playerStats.Health <= 0)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(
                 UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
             );
         }
 
-        Vector2 finalForce = new Vector2(
-            -contact.normalized.x * pushAmount * 2f,
-             jumpForce
-                ) / 2f;
+        Vector2 finalForce =
+            new Vector2(-contact.normalized.x * pushAmount * 2f, trueJumpForce) / 2f;
         Vector2 getPushed = finalForce;
         rb.AddForce(getPushed, ForceMode2D.Impulse);
         isKnockedBack = true;
@@ -217,10 +248,9 @@ public class Player : MonoBehaviour
 
     public void Heal()
     {
-        if (health < maxHealth)
-            health += 1;
+        if (playerStats.Health < playerStats.MaxHealth)
+            playerStats.Heal(1);
         else
             playerStats.AddPoints(500);
     }
-
 }

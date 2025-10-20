@@ -22,6 +22,7 @@ public class Heart : MonoBehaviour
             timer = 0f;
         }
     }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
