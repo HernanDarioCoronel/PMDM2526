@@ -2,7 +2,7 @@ using AnimEnums;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class PlayerWithGrapple : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField]
@@ -24,11 +24,21 @@ public class Player : MonoBehaviour
 
     bool justLatched = false;
 
+    [Header("Grappling Settings")]
+    [SerializeField]
+    float grappleMaxRange = 10f;
+
+    [SerializeField]
+    float grappleSwingForce = 15f;
     PlayerInput playerInput;
     Rigidbody2D rb;
 
     [SerializeField]
     float gravityScaleAtStart;
+    Collider2D currentGrapplePoint;
+    DistanceJoint2D grappleJoint;
+    LineRenderer grappleLine;
+    bool isGrappling = false;
     public int jumpsRemaining = 0;
     bool isKnockedBack = false;
     float knockbackTimer = 0.6f;
@@ -48,6 +58,17 @@ public class Player : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
 
+        grappleJoint = GetComponent<DistanceJoint2D>();
+        grappleJoint.enabled = false;
+        grappleJoint.autoConfigureDistance = false;
+        grappleJoint.autoConfigureConnectedAnchor = false;
+
+        grappleLine = GetComponent<LineRenderer>();
+        grappleLine.enabled = false;
+        grappleLine.startWidth = 0.05f;
+        grappleLine.endWidth = 0.05f;
+        grappleLine.startColor = Color.green;
+        grappleLine.endColor = Color.green;
         playerStats.ResetScore();
         playerStats.ResetHealth();
         trueJumpForce *= jumpForceInTiles;
@@ -68,6 +89,12 @@ public class Player : MonoBehaviour
                 knockbackTimer = knockbackTimerReset;
             }
         }
+
+        if (isGrappling)
+        {
+            Vector2 moveInput = playerInput.actions["Move"].ReadValue<Vector2>();
+            rb.AddForce(Vector2.right * moveInput.x * grappleSwingForce);
+        }
     }
 
     void Update()
@@ -77,8 +104,35 @@ public class Player : MonoBehaviour
         if (playerInput.actions["Jump"].WasPressedThisFrame())
         {
             Jump();
+            GrapplingSystem.StopGrapple(grappleJoint, grappleLine);
+            isGrappling = false;
         }
 
+        // Grappling
+        if (playerInput.actions["Interact"].WasPressedThisFrame())
+        {
+            if (!isGrappling)
+            {
+                rb.gravityScale = gravityScaleAtStart * 2;
+                isGrappling = GrapplingSystem.StartGrapple(
+                    rb,
+                    grappleJoint,
+                    grappleLine,
+                    transform,
+                    currentGrapplePoint,
+                    grappleMaxRange
+                );
+            }
+            else
+            {
+                rb.gravityScale = gravityScaleAtStart;
+                GrapplingSystem.StopGrapple(grappleJoint, grappleLine);
+                isGrappling = false;
+            }
+        }
+
+        // Dibuja la cuerda
+        GrapplingSystem.DrawGrappleLine(grappleLine, transform, currentGrapplePoint);
         animator.SetInteger("currAnim", (int)currentAnim);
     }
 
@@ -103,6 +157,18 @@ public class Player : MonoBehaviour
         {
             playerStats.ApplyDamage(playerStats.MaxHealth);
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("GrapplePoint"))
+            currentGrapplePoint = other;
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other == currentGrapplePoint)
+            currentGrapplePoint = null;
     }
 
     void OnCollisionExit2D(Collision2D collision)
