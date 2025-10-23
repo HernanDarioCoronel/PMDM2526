@@ -13,12 +13,12 @@ public class Explode2D : MonoBehaviour
 
     public void Explode()
     {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (!sr)
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (!spriteRenderer)
             return;
 
-        Texture2D texture = sr.sprite.texture;
-        Rect rect = sr.sprite.rect;
+        Texture2D texture = spriteRenderer.sprite.texture;
+        Rect rect = spriteRenderer.sprite.rect;
 
         float pieceWidth = rect.width / piecesX;
         float pieceHeight = rect.height / piecesY;
@@ -41,10 +41,10 @@ public class Explode2D : MonoBehaviour
                         pieceHeight
                     ),
                     new Vector2(0.5f, 0.5f),
-                    sr.sprite.pixelsPerUnit
+                    spriteRenderer.sprite.pixelsPerUnit
                 );
-                pieceSR.sortingLayerID = sr.sortingLayerID;
-                pieceSR.sortingOrder = sr.sortingOrder;
+                pieceSR.sortingLayerID = spriteRenderer.sortingLayerID;
+                pieceSR.sortingOrder = spriteRenderer.sortingOrder;
 
                 piece.transform.localScale = Vector3.one * Random.Range(1f, 1.3f);
 

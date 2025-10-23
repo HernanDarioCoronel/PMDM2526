@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <VisualElement name="hearts-container" class="hearts-container">        
+    </VisualElement>
+</ui:UXML>

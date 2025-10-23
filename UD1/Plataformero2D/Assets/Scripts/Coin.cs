@@ -21,6 +21,7 @@ public class Coin : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            collision.GetComponent<Player>().CollectCoin();
             StartCoroutine(getPickedUp());
         }
     }

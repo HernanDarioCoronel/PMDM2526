@@ -1,0 +1,21 @@
+.hearts-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.heart {
+    width: 32px;
+    height: 32px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 4px;
+}
+
+.heart.full {
+    background-image: url("../Resources/UI/full_heart.png");
+}
+
+.heart.empty {
+    background-image: url("../Resources/UI/empty_heart.png");
+}

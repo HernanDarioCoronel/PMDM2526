@@ -241,7 +241,6 @@ public class Player : MonoBehaviour
     public void CollectCoin()
     {
         playerStats.AddPoints(250);
-        audioController.PlayCoinPickupSound();
     }
 
     public void Heal()
