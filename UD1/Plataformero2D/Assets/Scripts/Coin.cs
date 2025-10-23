@@ -1,41 +1,36 @@
+using System.Collections;
 using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public float rotationSpeed = 50f;
-    public float minAngle = 10f;
-    public float maxAngle = 80f;
+    AudioSource audioSource;
+    SpriteRenderer spriteRenderer;
+    Collider2D col;
 
-    private bool rotatingForward = true;
-    private float currentAngle;
+    [SerializeField]
+    AudioClip coinPickupClip;
 
-    void Update()
+    void Awake()
     {
-        currentAngle = transform.localEulerAngles.y;
-
-        if (currentAngle > 180f)
-            currentAngle -= 360f;
-
-        if (rotatingForward && currentAngle >= maxAngle)
-        {
-            rotatingForward = false;
-        }
-        else if (!rotatingForward && currentAngle <= minAngle)
-        {
-            rotatingForward = true;
-        }
-
-        float direction = rotatingForward ? 1f : -1f;
-
-        transform.Rotate(Vector3.up * direction * rotationSpeed * Time.deltaTime);
+        audioSource = GetComponent<AudioSource>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        col = GetComponent<Collider2D>();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Player>().CollectCoin();
-            Destroy(gameObject);
+            StartCoroutine(getPickedUp());
         }
+    }
+
+    IEnumerator getPickedUp()
+    {
+        spriteRenderer.enabled = false;
+        col.enabled = false;
+        audioSource.PlayOneShot(coinPickupClip);
+        yield return new WaitForSeconds(coinPickupClip.length);
+        Destroy(gameObject);
     }
 }
