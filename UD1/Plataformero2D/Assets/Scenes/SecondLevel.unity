@@ -73052,6 +73052,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5767283477255245710, guid: 5b130e91ecfe9aa47ba447e462f38237, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 4d865b0a36dc7704d9b9c44fa0117472, type: 3}
     - target: {fileID: 6786043528494070261, guid: 5b130e91ecfe9aa47ba447e462f38237, type: 3}
       propertyPath: m_Name
       value: CinemachineCamera

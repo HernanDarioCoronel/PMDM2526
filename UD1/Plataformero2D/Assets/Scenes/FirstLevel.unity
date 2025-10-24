@@ -24243,7 +24243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5767283477255245710, guid: 5b130e91ecfe9aa47ba447e462f38237, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5767283477255245710, guid: 5b130e91ecfe9aa47ba447e462f38237, type: 3}
       propertyPath: m_Resource
@@ -28778,7 +28778,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1981111348}
   - component: {fileID: 1981111349}
-  - component: {fileID: 1981111350}
+  - component: {fileID: 1981111351}
   m_Layer: 0
   m_Name: Bounds
   m_TagString: Untagged
@@ -28846,7 +28846,7 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
---- !u!114 &1981111350
+--- !u!114 &1981111351
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -28855,11 +28855,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1981111346}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 652286e27240b414ebe136315b7988a0, type: 3}
+  m_Script: {fileID: 11500000, guid: eeca7d42694b83144a8f3e23810ecf66, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  nextSceneName: SecondLevel
-  sceneController: {fileID: 1232372797}
+  m_EditorClassIdentifier: Assembly-CSharp::SceneController
 --- !u!1001 &2000066318
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28927,6 +28925,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2004358953}
   - component: {fileID: 2004358952}
+  - component: {fileID: 2004358955}
+  - component: {fileID: 2004358954}
   m_Layer: 0
   m_Name: LevelTransition
   m_TagString: Untagged
@@ -28992,6 +28992,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2004358954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004358951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652286e27240b414ebe136315b7988a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Win
+  nextSceneName: SecondLevel
+  sceneController: {fileID: 1232372797}
+--- !u!114 &2004358955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004358951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeca7d42694b83144a8f3e23810ecf66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneController
 --- !u!1001 &2022453076
 PrefabInstance:
   m_ObjectHideFlags: 0
