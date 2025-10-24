@@ -31,7 +31,7 @@ public class Coin : MonoBehaviour
         spriteRenderer.enabled = false;
         col.enabled = false;
         audioSource.PlayOneShot(coinPickupClip);
-        GetComponent<Explode2D>().Explode();
+        //GetComponent<Explode2D>().Explode();
         yield return new WaitForSeconds(coinPickupClip.length);
         Destroy(gameObject);
     }

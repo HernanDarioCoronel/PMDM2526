@@ -2,7 +2,11 @@
     <Style src="project://database/Assets/UI/Menu.uss?fileID=7433441132597879392&amp;guid=abef9977bfe441e428b8d8504607547e&amp;type=3#Menu" />
     <ui:GroupBox style="width: 100%; height: 100%; flex-wrap: nowrap; justify-content: center; align-self: center; align-items: center;">
         <ui:Label text="Plataformero 2D" class="title" style="-unity-font-style: bold; font-size: 48px;" />
-        <ui:Button text="Jugar" class="button" style="-unity-text-align: middle-center; white-space: nowrap; text-overflow: clip;" />
-        <ui:Button text="Salir" class="button" style="width: 150px;" />
+        <ui:Button text="&#10;" name="start-button" class="button" style="-unity-text-align: middle-center; white-space: nowrap; text-overflow: clip;">
+            <ui:Label text="Jugar" />
+        </ui:Button>
+        <ui:Button name="exit-button" class="button" style="width: 150px;">
+            <ui:Label text="Salir" />
+        </ui:Button>
     </ui:GroupBox>
 </ui:UXML>
