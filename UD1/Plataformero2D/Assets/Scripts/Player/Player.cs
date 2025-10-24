@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
     PlayerStats playerStats;
     int pointsLostPerSecond = 50;
     float timer = 0f;
+    public HeartsBarController heartsBarController;
 
     [SerializeField]
     Animator animator;
@@ -57,8 +58,6 @@ public class Player : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
-        playerStats.ResetScore();
-        playerStats.ResetHealth();
         trueJumpForce *= jumpForceInTiles;
         gravityScaleAtStart = rb.gravityScale;
     }
@@ -222,7 +221,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(Vector2 contact, int damage)
     {
-        playerStats.ApplyDamage(damage);
+        heartsBarController.TakeDamage(damage);
         audioController.PlayHurtSound();
         if (playerStats.Health <= 0)
         {
@@ -246,7 +245,7 @@ public class Player : MonoBehaviour
     public void Heal()
     {
         if (playerStats.Health < playerStats.MaxHealth)
-            playerStats.Heal(1);
+            heartsBarController.Heal(1);
         else
             playerStats.AddPoints(500);
 

@@ -3,13 +3,13 @@ using UnityEngine.UIElements;
 
 public class HeartsBarController : MonoBehaviour
 {
-    public int maxHearts = 5;
-    public int currentHearts = 3;
-
+    public PlayerStats playerStats;
     private VisualElement heartsContainer;
 
     void OnEnable()
     {
+        playerStats.ResetScore();
+        playerStats.ResetHealth();
         var root = GetComponent<UIDocument>().rootVisualElement;
         heartsContainer = root.Q<VisualElement>("hearts-container");
         UpdateHearts();
@@ -19,12 +19,12 @@ public class HeartsBarController : MonoBehaviour
     {
         heartsContainer.Clear();
 
-        for (int i = 0; i < maxHearts; i++)
+        for (int i = 1; i <= playerStats.maxHealth; i++)
         {
             VisualElement heart = new VisualElement();
             heart.AddToClassList("heart");
 
-            if (i < currentHearts)
+            if (i <= playerStats.health)
                 heart.AddToClassList("full");
             else
                 heart.AddToClassList("empty");
@@ -36,14 +36,14 @@ public class HeartsBarController : MonoBehaviour
     // Ejemplo: resta vida
     public void TakeDamage(int amount)
     {
-        currentHearts = Mathf.Max(currentHearts - amount, 0);
+        playerStats.ApplyDamage(amount);
         UpdateHearts();
     }
 
     // Ejemplo: cura vida
     public void Heal(int amount)
     {
-        currentHearts = Mathf.Min(currentHearts + amount, maxHearts);
+        playerStats.Heal(1);
         UpdateHearts();
     }
 }

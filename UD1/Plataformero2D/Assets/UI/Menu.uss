@@ -1,0 +1,28 @@
+:root {
+}
+
+.button {
+    font-style: bold;
+    font-size: 18;
+    text-align: middle-center;
+    background-color: transparent;
+    border-color: rgb(247, 218, 188);
+    color: rgb(247, 218, 188);
+    margin: 20px;
+    border-radius: 15px;
+    width: 200px;
+}
+
+.button:hover {
+    background-color: rgb(247, 218, 188);
+    color: rgb(34, 34, 34);
+    rotate: 12deg;
+}
+
+.title {
+    font-size: 36;
+    font-style: bold;
+    color: rgb(247, 218, 188);
+    margin-bottom: 40px;
+    text-align: middle-center;
+}
