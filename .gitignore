@@ -1,50 +1,76 @@
-# Unity project under UD1/MyGame2D
-UD1/MyGame2D/[Ll]ibrary/
-UD1/MyGame2D/[Tt]emp/
-UD1/MyGame2D/[Oo]bj/
-UD1/MyGame2D/[Bb]uild/
-UD1/MyGame2D/[Bb]uilds/
-UD1/MyGame2D/[Ll]ogs/
-UD1/MyGame2D/[Mm]emoryCaptures/
-UD1/MyGame2D/[Bb]uildCache/
+# ------------------------------------
+# 📂 Unity Projects (Applies Anywhere)
+# ------------------------------------
+# Generated files/folders that don't need to be tracked
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Bb]uild/
+**/[Bb]uilds/
+**/[Ll]ogs/
+**/[Mm]emoryCaptures/
+**/[Bb]uildCache/
+**/[Uu]ser[Ss]ettings/
+**/[Aa]ssets/AssetStoreTools*
 
-# Ignore IDE files in project
-UD1/MyGame2D/*.csproj
-UD1/MyGame2D/*.sln
-UD1/MyGame2D/.vs/
-UD1/MyGame2D/.idea/
-UD1/MyGame2D/.vscode/
+# VS/MD/Consulo solution and project files, ignored globally
+# You don't need to specify the UD1/MyGame2D/ prefix anymore
+**/*.csproj
+**/*.unityproj
+**/*.sln
+**/*.suo
+**/*.tmp
+**/*.user
+**/*.userprefs
+**/*.pidb
+**/*.booproj
+**/*.svd
+**/*.pdb
+ExportedObj/
 
-# Unity project under UD1/Coneho
-UD1/Coneho/[Ll]ibrary/
-UD1/Coneho/[Tt]emp/
-UD1/Coneho/[Oo]bj/
-UD1/Coneho/[Bb]uild/
-UD1/Coneho/[Bb]uilds/
-UD1/Coneho/[Ll]ogs/
-UD1/Coneho/[Mm]emoryCaptures/
-UD1/Coneho/[Bb]uildCache/
+# ------------------------------------
+# 🤖 Android Projects (Applies Anywhere)
+# ------------------------------------
+# Built application files
+**/*.apk
+**/*.ap_
+**/*.aab
+**/*.aar
 
-# Ignore IDE files in project
-UD1/Plataformero2D/*.csproj
-UD1/Plataformero2D/*.sln
-UD1/Plataformero2D/.vs/
-UD1/Plataformero2D/.idea/
-UD1/Plataformero2D/.vscode/
+# Gradle files
+**/.gradle/
+**/build/
+**/local.properties
+**/captures/
+**/.externalNativeBuild/
+**/.cxx/
 
-# Unity project under UD1/Plataformero2D
-UD1/Plataformero2D/[Ll]ibrary/
-UD1/Plataformero2D/[Tt]emp/
-UD1/Plataformero2D/[Oo]bj/
-UD1/Plataformero2D/[Bb]uild/
-UD1/Plataformero2D/[Bb]uilds/
-UD1/Plataformero2D/[Ll]ogs/
-UD1/Plataformero2D/[Mm]emoryCaptures/
-UD1/Plataformero2D/[Bb]uildCache/
+# Files for the ART/Dalvik VM and Java classes
+**/*.dex
+**/*.class
 
-# Ignore IDE files in project
-UD1/Plataformero2D/*.csproj
-UD1/Plataformero2D/*.sln
-UD1/Plataformero2D/.vs/
-UD1/Plataformero2D/.idea/
-UD1/Plataformero2D/.vscode/
+# 💡 NOTE: If you have a top-level 'build' folder that is NOT Android-related,
+# you will need to be more specific (e.g., /AndroidProjectName/build/).
+
+# ------------------------------------
+# 💻 Common IDE and OS Files (Applies Anywhere)
+# ------------------------------------
+# IntelliJ / Android Studio / Rider
+**/*.iml
+**/.idea/
+**/.vs/
+**/.vscode/
+**/.consulo/
+
+# macOS files
+**/.DS_Store
+# Windows files
+**/Thumbs.db
+
+# ------------------------------------
+# 📦 Other Common Ignored Files
+# ------------------------------------
+# Visual Studio / Rider cache directory
+.vs/
+# Unity-specific files
+**/*.unitypackage
