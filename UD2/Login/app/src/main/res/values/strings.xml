@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Login</string>
+    <string name="usuario">Usuario</string>
+    <string name="contrasenha">Contraseña</string>
+    <string name="nombre">Nombre</string>
+    <string name="email">Email</string>
+    <string name="repita_la_contrase_a">Repita la contraseña</string>
+    <string name="registrarse">Registrarse</string>
 </resources>
