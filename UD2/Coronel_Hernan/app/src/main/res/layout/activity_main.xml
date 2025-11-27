@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightPurple"
+        android:paddingHorizontal="16dp"
+        tools:context=".MainActivity">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="52dp"
+            android:contentDescription="Logo"
+            android:src="@drawable/logo_no_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/logoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="INTRODUCE OS TEUS DATOS"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="44dp"
+            android:ems="10"
+            android:hint="noa.valero@gmail.com"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoLabel" />
+
+        <EditText
+            android:id="@+id/nomeCt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="40dp"
+            android:ems="10"
+            android:hint="Noa"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email" />
+
+        <EditText
+            android:id="@+id/apelidoCt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="40dp"
+            android:ems="10"
+            android:hint="Valero"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nomeCt" />
+
+        <Button
+            android:id="@+id/enviarBt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="40dp"
+            android:text="Enviar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/apelidoCt" />
+
+        <ImageView
+            android:id="@+id/intaImg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="insta-link"
+            android:src="@drawable/instagram_icon"
+            android:tag="https://www.instagram.com/ies.muralla.romana/"
+            app:layout_constraintBottom_toBottomOf="@+id/webImg"
+            app:layout_constraintEnd_toStartOf="@+id/webImg"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/webImg" />
+
+        <ImageView
+            android:id="@+id/webImg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="32dp"
+            android:contentDescription="web-link"
+            android:src="@drawable/website_icon"
+            android:tag="https://www.edu.xunta.gal/centros/iesmurallaromana/"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/intaImg"
+            app:layout_constraintTop_toBottomOf="@+id/enviarBt" />
+
+        <TextView
+            android:id="@+id/nomeLb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nome"
+            app:layout_constraintBottom_toBottomOf="@+id/nomeCt"
+            app:layout_constraintEnd_toStartOf="@+id/nomeCt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nomeCt" />
+
+        <TextView
+            android:id="@+id/apelidoLb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apelido"
+            app:layout_constraintBottom_toBottomOf="@+id/apelidoCt"
+            app:layout_constraintEnd_toStartOf="@+id/apelidoCt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/apelidoCt" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
