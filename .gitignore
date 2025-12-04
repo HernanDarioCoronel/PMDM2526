@@ -1,76 +1,38 @@
 # ------------------------------------
-# 📂 Unity Projects (Applies Anywhere)
+# Reglas estándar de Unity (Aplicadas a cualquier subdirectorio)
+# Estos directorios y archivos siempre deben ignorarse.
 # ------------------------------------
-# Generated files/folders that don't need to be tracked
-**/[Ll]ibrary/
-**/[Tt]emp/
-**/[Oo]bj/
-**/[Bb]uild/
-**/[Bb]uilds/
-**/[Ll]ogs/
-**/[Mm]emoryCaptures/
-**/[Bb]uildCache/
-**/[Uu]ser[Ss]ettings/
-**/[Aa]ssets/AssetStoreTools*
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+[Bb]uildCache/
+[Ss]ymbols/
+[Dd]erivedData/
 
-# VS/MD/Consulo solution and project files, ignored globally
-# You don't need to specify the UD1/MyGame2D/ prefix anymore
-**/*.csproj
-**/*.unityproj
-**/*.sln
-**/*.suo
-**/*.tmp
-**/*.user
-**/*.userprefs
-**/*.pidb
-**/*.booproj
-**/*.svd
-**/*.pdb
-ExportedObj/
+# Archivos de configuración de proyecto generados automáticamente
+*.pidb
+*.unityhost
+*.csproj
+*.unityproj
+*.sln
+*.user
+*.usermsg
+*.suo
 
-# ------------------------------------
-# 🤖 Android Projects (Applies Anywhere)
-# ------------------------------------
-# Built application files
-**/*.apk
-**/*.ap_
-**/*.aab
-**/*.aar
-
-# Gradle files
-**/.gradle/
-**/build/
-**/local.properties
-**/captures/
-**/.externalNativeBuild/
-**/.cxx/
-
-# Files for the ART/Dalvik VM and Java classes
-**/*.dex
-**/*.class
-
-# 💡 NOTE: If you have a top-level 'build' folder that is NOT Android-related,
-# you will need to be more specific (e.g., /AndroidProjectName/build/).
-
-# ------------------------------------
-# 💻 Common IDE and OS Files (Applies Anywhere)
-# ------------------------------------
-# IntelliJ / Android Studio / Rider
-**/*.iml
-**/.idea/
-**/.vs/
-**/.vscode/
-**/.consulo/
-
-# macOS files
-**/.DS_Store
-# Windows files
-**/Thumbs.db
-
-# ------------------------------------
-# 📦 Other Common Ignored Files
-# ------------------------------------
-# Visual Studio / Rider cache directory
+# Archivos de caché
 .vs/
-# Unity-specific files
-**/*.unitypackage
+.idea/
+.vscode/
+
+# Ignorar archivos temporales y paquetes de Unity
+*.unitypackage
+Temp/
+Obj/
+Build/
+Builds/
+Library/
+Logs/
