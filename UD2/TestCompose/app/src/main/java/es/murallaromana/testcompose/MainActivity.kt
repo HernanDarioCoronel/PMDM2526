@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import es.murallaromana.testcompose.ui.theme.TestComposeTheme
+import es.murallaromana.testcompose.ui.theme.components.MiTopBar
 import es.murallaromana.testcompose.ui.theme.components.MisTextField
 import es.murallaromana.testcompose.ui.theme.layouts.MiColumna
 
@@ -32,13 +33,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TestComposeTheme {
-                /*MiColumna(
-                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp)
-                )*/
-                MisTextField()
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = Color.LightGray,
+                    topBar = { MiTopBar(modifier = Modifier) }
+
+                ) { innerPadding ->
+                    MisTextField(modifier = Modifier.padding(innerPadding))
+                }
+
             }
         }
     }
+
 
     @Preview(showSystemUi = true)
     @Composable
