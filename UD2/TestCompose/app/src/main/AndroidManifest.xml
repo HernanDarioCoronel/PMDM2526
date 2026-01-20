@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TestCompose">
         <activity
+            android:name=".ScafoldingTest"
+            android:exported="false"
+            android:label="@string/title_activity_scafolding_test"
+            android:theme="@style/Theme.TestCompose" />
+        <activity
             android:name=".MainActivity2"
             android:exported="false"
             android:label="@string/title_activity_main2"
